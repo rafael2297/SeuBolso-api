@@ -2,17 +2,27 @@ package com.seubolso.controller;
 
 import com.seubolso.model.Usuario;
 import com.seubolso.service.UsuarioService;
+import com.seubolso.util.JwtUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/usuarios")
-@CrossOrigin("*")
+
 public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @GetMapping("/meuPerfil")
+    public ResponseEntity<Usuario> meuPerfil() {
+        // Pega o email do usuário logado (do JWT)
+        String email = JwtUtil.getLoggedUserEmail();
+        Usuario usuario = usuarioService.buscarPorEmail(email);
+        return ResponseEntity.ok(usuario);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> buscar(@PathVariable Long id) {
