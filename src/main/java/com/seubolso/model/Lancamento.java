@@ -5,6 +5,8 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "lancamentos")
 @Getter @Setter
@@ -45,6 +47,7 @@ public class Lancamento {
 
     // RELACIONAMENTO COM USUÁRIO
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 

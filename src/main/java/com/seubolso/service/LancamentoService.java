@@ -19,27 +19,11 @@ public class LancamentoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Lancamento criar(Long usuarioId, Lancamento novo) {
+    public Lancamento criar(Long usuarioId, Lancamento lancamento) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
 
-        novo.setUsuario(usuario);
-        return lancamentoRepository.save(novo);
-    }
-
-    public Lancamento editar(Long id, Lancamento atualizado) {
-        Lancamento lancamento = buscarPorId(id);
-
-        lancamento.setTitulo(atualizado.getTitulo());
-        lancamento.setValor(atualizado.getValor());
-        lancamento.setCategoria(atualizado.getCategoria());
-        lancamento.setData(atualizado.getData());
-        lancamento.setFormaPagamento(atualizado.getFormaPagamento());
-        lancamento.setDescricao(atualizado.getDescricao());
-        lancamento.setTipo(atualizado.getTipo());
-        lancamento.setDespesaFixa(atualizado.getDespesaFixa());
-        lancamento.setVencimento(atualizado.getVencimento());
-
+        lancamento.setUsuario(usuario);
         return lancamentoRepository.save(lancamento);
     }
 
@@ -59,12 +43,24 @@ public class LancamentoService {
         return lancamentoRepository.findByDespesaFixaTrueAndUsuarioId(usuarioId);
     }
 
-    public void deletar(Long id) {
-        lancamentoRepository.deleteById(id);
+    public Lancamento editar(Long id, Lancamento atualizado) {
+        Lancamento lanc = lancamentoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Lançamento não encontrado."));
+
+        lanc.setTitulo(atualizado.getTitulo());
+        lanc.setValor(atualizado.getValor());
+        lanc.setCategoria(atualizado.getCategoria());
+        lanc.setData(atualizado.getData());
+        lanc.setFormaPagamento(atualizado.getFormaPagamento());
+        lanc.setDescricao(atualizado.getDescricao());
+        lanc.setTipo(atualizado.getTipo());
+        lanc.setDespesaFixa(atualizado.getDespesaFixa());
+        lanc.setVencimento(atualizado.getVencimento());
+
+        return lancamentoRepository.save(lanc);
     }
 
-    public Lancamento buscarPorId(Long id) {
-        return lancamentoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Lançamento não encontrado."));
+    public void deletar(Long id) {
+        lancamentoRepository.deleteById(id);
     }
 }
